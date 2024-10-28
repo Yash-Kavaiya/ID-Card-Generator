@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist ID Card Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f7fa;
+        }
+        .form-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .id-preview-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .id-card {
+            width: 300px;
+            height: 480px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .id-front {
+            border: 1px solid #e0e0e0;
+        }
+        .id-back {
+            border: 1px solid #e0e0e0;
+        }
+        .profile-section {
+            background: #1a73e8;
+            height: 160px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .profile-upload {
+            width: 120px;
+            height: 120px;
+            border-radius: 60px;
+            border: 4px solid white;
+            object-fit: cover;
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+        }
+        .profile-upload-placeholder {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            border: 2px dashed #dee2e6;
+            cursor: pointer;
+        }
+        .id-content {
+            padding: 70px 20px 20px;
+            text-align: center;
+        }
+        .id-field {
+            margin: 15px 0;
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
+        .id-label {
+            color: #1a73e8;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            width: 80px;
+        }
+        .id-value {
+            color: #333;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+        .org-name {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            text-align: center;
+        }
+        .visitor-tag {
+            background: #1a73e8;
+            color: white;
+            padding: 4px 15px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        .back-content {
+            padding: 30px 20px;
+        }
+        .back-header {
+            color: #1a73e8;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+        .contact-info {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+            font-size: 0.8rem;
+        }
+        .form-control {
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .form-label {
+            font-weight: 500;
+            color: #333;
+        }
+        .barcode {
+            width: 80%;
+            height: 40px;
+            background: #333;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <!-- Form Section -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-6">
+                <div class="form-card p-4">
+                    <h4 class="text-center mb-4" style="color: #1a73e8;">ID Card Generator</h4>
+                    <form id="idCardForm">
+                        <div class="text-center mb-4">
+                            <div class="profile-upload-placeholder" onclick="document.getElementById('profileImage').click()">
+                                <img id="imagePreview" class="profile-upload d-none" alt="Profile">
+                                <span class="text-muted" id="uploadText">Upload Photo</span>
+                            </div>
+                            <input type="file" class="d-none" id="profileImage" accept="image/*" required>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label">Organization Name</label>
+                                <input type="text" class="form-control" id="orgName" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="fullName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Mobile</label>
+                                <input type="tel" class="form-control" id="mobile" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control" id="dob" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-control" id="address" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Valid Upto</label>
+                                <input type="date" class="form-control" id="validUpto" required>
+                            </div>
+                            <div class="col-12">
+                                <button type="button" class="btn w-100" 
+                                    style="background: #1a73e8; color: white;"
+                                    onclick="generatePreview()">
+                                    Generate ID Card
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preview Section -->
+        <div class="id-preview-container">
+            <!-- Front Side -->
+            <div class="id-card id-front">
+                <div class="profile-section">
+                    <div class="org-name" id="previewOrgName">Organization Name</div>
+                    <img id="previewProfileImage" class="profile-upload" src="https://via.placeholder.com/120" alt="Profile">
+                </div>
+                <div class="id-content">
+                    <h5 id="previewFullName" style="margin-bottom: 20px;">Full Name</h5>
+                    <div class="id-field">
+                        <span class="id-label">Mobile:</span>
+                        <span class="id-value" id="previewMobile">123-456-7890</span>
+                    </div>
+                    <div class="id-field">
+                        <span class="id-label">D.O.B:</span>
+                        <span class="id-value" id="previewDOB">15/09/2000</span>
+                    </div>
+                    <div class="id-field">
+                        <span class="id-label">Address:</span>
+                        <span class="id-value" id="previewAddress">123 Anywhere St.</span>
+                    </div>
+                    <div class="visitor-tag">VISITOR CARD</div>
+                </div>
+            </div>
+
+            <!-- Back Side -->
+            <div class="id-card id-back">
+                <div class="back-content">
+                    <div class="back-header">Company Information</div>
+                    <div class="id-field">
+                        <span class="id-label">Valid Upto:</span>
+                        <span class="id-value" id="previewValidUpto">31/12/2024</span>
+                    </div>
+                    <div class="barcode"></div>
+                    <div class="contact-info">
+                        <p>For verification and inquiries:</p>
+                        <p>www.companywebsite.com</p>
+                        <p>support@company.com</p>
+                        <p>+1 (555) 123-4567</p>
+                        <p>123 Company Street, Business District</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <button class="btn btn-success px-4" onclick="downloadCard()">
+                Download ID Card
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script>
+        // Handle image upload preview
+        document.getElementById('profileImage').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    preview.classList.remove('d-none');
+                    document.getElementById('uploadText').classList.add('d-none');
+                    document.getElementById('previewProfileImage').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function generatePreview() {
+            const fullName = document.getElementById('fullName').value;
+            const orgName = document.getElementById('orgName').value;
+            const mobile = document.getElementById('mobile').value;
+            const dob = document.getElementById('dob').value;
+            const address = document.getElementById('address').value;
+            const validUpto = document.getElementById('validUpto').value;
+
+            document.getElementById('previewOrgName').textContent = orgName;
+            document.getElementById('previewFullName').textContent = fullName;
+            document.getElementById('previewMobile').textContent = mobile;
+            document.getElementById('previewDOB').textContent = formatDate(dob);
+            document.getElementById('previewAddress').textContent = address;
+            document.getElementById('previewValidUpto').textContent = formatDate(validUpto);
+        }
+
+        function formatDate(dateString) {
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-GB', options);
+        }
+
+        async function downloadCard() {
+            const container = document.querySelector('.id-preview-container');
+            const canvas = await html2canvas(container);
+            const link = document.createElement('a');
+            link.download = 'id-card.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>

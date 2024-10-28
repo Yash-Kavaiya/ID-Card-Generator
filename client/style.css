@@ -1,0 +1,46 @@
+/* Apply Nunito font */
+body, h1, h4, p, label, button {
+    font-family: 'Nunito', sans-serif;
+}
+
+.text-primary {
+    color: #4b0082 !important; /* Corporate deep purple */
+}
+
+.card, .modal-content {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for ID card preview in modal */
+#idCardPreview {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #ffffff;
+    border-radius: 8px;
+}
+
+#idCardPreview img {
+    border: 2px solid #4b0082;
+}
+
+.btn-primary {
+    background-color: #4b0082;
+    border-color: #4b0082;
+}
+
+.btn-primary:hover {
+    background-color: #3a0066;
+    border-color: #3a0066;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
